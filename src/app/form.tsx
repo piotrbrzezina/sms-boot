@@ -77,7 +77,7 @@ export default function Form() {
 					<input
 						type="text"
 						name="message"
-						className="w-96"
+						className="w-9/12"
 						id="message"
 						value={message}
 						onChange={(e) => setMessage(e.target.value)}
@@ -90,6 +90,7 @@ export default function Form() {
 						type="text"
 						name="url"
 						id="url"
+						className="w-6/12"
 						value={url}
 						onChange={(e) => setUrl(e.target.value)}
 					/>
