@@ -1,19 +1,22 @@
 "use client";
 import { type FormEvent, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 export default function Form() {
 	const [message, setMessage] = useState("");
 	const [url, setUrl] = useState("");
+	const [userId, setUserId] = useState("");
 
 	if (url === "") {
 		setUrl("https://d541-91-233-251-217.ngrok-free.app/api/chat");
+		setUserId(uuidv4());
 	}
 
 	async function onSubmit(event: FormEvent<HTMLFormElement>) {
 		event.preventDefault();
 		// https://d541-91-233-251-217.ngrok-free.app/api/chat
 		const formData = new FormData(event.currentTarget);
-		const request = { message: formData.get("message") };
+		const request = { message: formData.get("message"), userId: formData.get("userId") };
 		const url = formData.get("url");
 		if (url !== null) {
 			const commentsList = document.querySelector(".comment-wrapper");
@@ -80,6 +83,7 @@ export default function Form() {
 						onChange={(e) => setMessage(e.target.value)}
 					/>
 				</p>
+
 				<p className="p-2">
 					<label>Url:</label>
 					<input
@@ -91,6 +95,7 @@ export default function Form() {
 						onChange={(e) => setUrl(e.target.value)}
 					/>
 				</p>
+				<input type="hidden" name="userId" id="userId" value={userId} />
 
 				<p className="pt-2">
 					<button
