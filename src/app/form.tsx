@@ -9,6 +9,19 @@ export default function Form() {
 		const request = { message: formData.get("message") };
 		const url = formData.get("url");
 		if (url !== null) {
+			const commentsList = document.querySelector(".comment-wrapper");
+			const comment = document.createElement("div");
+			comment.innerHTML = `
+			<div class="answer m-5 text-right rounded-xl border border-b  border-gray-300 bg-gray-200 bg-gradient-to-b from-zinc-200 p-4 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:bg-zinc-800/30 dark:from-inherit">
+				<p>
+					<b>Client:</b>
+				</p>
+				<p>Lorem ipsum</p>
+			</div>
+			
+			`;
+
+			commentsList?.append(comment);
 			const response = await fetch(url.toString(), {
 				method: "POST",
 				headers: {
@@ -21,13 +34,28 @@ export default function Form() {
 			if (response.ok) {
 				const data = (await response.json()) as { Response: string };
 
-				console.log(data);
+				const commentResponse = document.createElement("div");
+
+				commentResponse.innerHTML =
+					`
+			<div class="answer m-5 rounded-xl border border-b  border-gray-300 bg-gray-200 bg-gradient-to-b from-zinc-200 p-4 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:bg-zinc-800/30 dark:from-inherit">
+			<p>
+				<b>Chat:</b>
+			</p>
+			<p>` +
+					data.Response +
+					`</p>
+			</div>
+
+			`;
+
+				commentsList?.append(commentResponse);
 			}
 		}
 	}
 
 	return (
-		<div className="p-5 pl-0">
+		<div className="p-15 bg-gray-100 pl-0">
 			<form onSubmit={onSubmit}>
 				<p className="p-2">
 					<label>Message:</label>

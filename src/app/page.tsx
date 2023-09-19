@@ -13,8 +13,8 @@ export default function Home() {
 					Please provide a date and time when you would like to schedule the installation.
 				</div>
 
-				<div className="commentWrapper">
-					<div className="answer m-5 rounded-xl border border-b  border-gray-300 bg-gray-200 bg-gradient-to-b from-zinc-200 p-4 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:bg-zinc-800/30 dark:from-inherit">
+				<div className="comment-wrapper">
+					{/* <div className="answer m-5 rounded-xl border border-b  border-gray-300 bg-gray-200 bg-gradient-to-b from-zinc-200 p-4 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:bg-zinc-800/30 dark:from-inherit">
 						<p>
 							<b>Chat:</b>
 						</p>
@@ -25,7 +25,7 @@ export default function Home() {
 							<b>Client:</b>
 						</p>
 						<p>Lorem ipsum</p>
-					</div>
+					</div> */}
 				</div>
 				<Form />
 			</div>
