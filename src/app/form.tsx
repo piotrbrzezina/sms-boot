@@ -1,7 +1,9 @@
 "use client";
-import { type FormEvent } from "react";
+import { type FormEvent, useState } from "react";
 
 export default function Form() {
+	const [message, setMessage] = useState("");
+
 	async function onSubmit(event: FormEvent<HTMLFormElement>) {
 		event.preventDefault();
 		// https://d541-91-233-251-217.ngrok-free.app/api/chat
@@ -11,15 +13,20 @@ export default function Form() {
 		if (url !== null) {
 			const commentsList = document.querySelector(".comment-wrapper");
 			const comment = document.createElement("div");
-			comment.innerHTML = `
+			comment.innerHTML =
+				`
 			<div class="answer m-5 text-right rounded-xl border border-b  border-gray-300 bg-gray-200 bg-gradient-to-b from-zinc-200 p-4 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:bg-zinc-800/30 dark:from-inherit">
 				<p>
 					<b>Client:</b>
 				</p>
-				<p>Lorem ipsum</p>
+				<p>` +
+				formData.get("message")?.toString() +
+				`</p>
 			</div>
 			
 			`;
+
+			setMessage("");
 
 			commentsList?.append(comment);
 			const response = await fetch(url.toString(), {
@@ -59,7 +66,14 @@ export default function Form() {
 			<form onSubmit={onSubmit}>
 				<p className="p-2">
 					<label>Message:</label>
-					<input type="text" name="message" className="w-96" />
+					<input
+						type="text"
+						name="message"
+						className="w-96"
+						id="message"
+						value={message}
+						onChange={(e) => setMessage(e.target.value)}
+					/>
 				</p>
 				<p className="p-2">
 					<label>Url:</label>
