@@ -19,7 +19,7 @@ export default function Form() {
 			});
 
 			if (response.ok) {
-				const data = (await response.json()) as { message: string };
+				const data = (await response.json()) as { Response: string };
 
 				console.log(data);
 			}
