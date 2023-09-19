@@ -16,7 +16,7 @@ export default function Form() {
 		event.preventDefault();
 		// https://d541-91-233-251-217.ngrok-free.app/api/chat
 		const formData = new FormData(event.currentTarget);
-		const request = { message: formData.get("message"), userId: formData.get("userId") };
+		const request = { message: formData.get("message"), user_id: formData.get("user_id") };
 		const url = formData.get("url");
 		if (url !== null) {
 			const commentsList = document.querySelector(".comment-wrapper");
@@ -91,11 +91,10 @@ export default function Form() {
 						name="url"
 						id="url"
 						value={url}
-						// value=""
 						onChange={(e) => setUrl(e.target.value)}
 					/>
 				</p>
-				<input type="hidden" name="userId" id="userId" value={userId} />
+				<input type="hidden" name="user_id" value={userId} />
 
 				<p className="pt-2">
 					<button
