@@ -3,6 +3,11 @@ import { type FormEvent, useState } from "react";
 
 export default function Form() {
 	const [message, setMessage] = useState("");
+	const [url, setUrl] = useState("");
+
+	if (url === "") {
+		setUrl("https://d541-91-233-251-217.ngrok-free.app/api/chat");
+	}
 
 	async function onSubmit(event: FormEvent<HTMLFormElement>) {
 		event.preventDefault();
@@ -80,7 +85,10 @@ export default function Form() {
 					<input
 						type="text"
 						name="url"
-						value="https://d541-91-233-251-217.ngrok-free.app/api/chat"
+						id="url"
+						value={url}
+						// value=""
+						onChange={(e) => setUrl(e.target.value)}
 					/>
 				</p>
 
