@@ -71,7 +71,7 @@ export default function Form() {
 		}
 	}
 
-    function initChat() {
+    async function initChat() {
 
         console.log(url);
 		const request = { message: "init", user_id: userId };
@@ -111,8 +111,8 @@ export default function Form() {
     }
 
 	useEffect(() => {
-		initChat()
-	}, []);
+		void initChat()
+	},[]);
 
 	return (
 		<div>
