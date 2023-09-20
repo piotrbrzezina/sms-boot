@@ -1,5 +1,5 @@
 "use client";
-import { type FormEvent, useState } from "react";
+import { type FormEvent, useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 export default function Form() {
@@ -70,6 +70,49 @@ export default function Form() {
 			}
 		}
 	}
+
+    async function initChat() {
+
+        console.log(url);
+		const request = { message: "init", user_id: userId };
+        setIsActive(true);
+
+        const response = await fetch((url + '/init').toString(), {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+			body: JSON.stringify(request),
+        });
+
+        if (response.ok) {
+			const data = (await response.json()) as { Response: string };
+
+			const commentResponse = document.createElement("div");
+
+			commentResponse.innerHTML =
+				`
+			<div class="answer m-5 rounded-xl border border-b  border-gray-300 bg-gray-200 bg-gradient-to-b from-zinc-200 p-4 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:bg-zinc-800/30 dark:from-inherit">
+			<p>
+				<b>Chat:</b>
+			</p>
+			<p>` +
+				data.Response +
+				`</p>
+			</div>
+
+			`;
+			setIsActive(false);
+			const commentsList = document.querySelector(".comment-wrapper");
+			commentsList?.append(commentResponse);
+
+        }
+    }
+
+	useEffect(() => {
+		initChat();
+	},[]);
 
 	return (
 		<div>
