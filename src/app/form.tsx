@@ -18,7 +18,7 @@ export default function Form() {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
 
-        const request = {message: formData.get("message"), user_id: formData.get("user_id")};
+        const request = {message: formData.get("message"), user_id: userId};
 
         if (url !== null) {
 
