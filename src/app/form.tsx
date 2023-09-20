@@ -1,80 +1,83 @@
 "use client";
-import { type FormEvent, useState, useEffect } from "react";
-import { v4 as uuidv4 } from "uuid";
+import {type FormEvent, useState, useEffect} from "react";
+import {v4 as uuidv4} from "uuid";
 
 export default function Form() {
-	const [message, setMessage] = useState("");
-	const [url, setUrl] = useState("");
-	const [userId, setUserId] = useState("");
-	const [isActive, setIsActive] = useState(false);
+    const [message, setMessage] = useState("");
+    const [url, setUrl] = useState("");
+    const [userId, setUserId] = useState("");
+    const [isActive, setIsActive] = useState(false);
 
-	if (url === "") {
-		setUrl("http://localhost/api/chat");
-		setUserId(uuidv4());
-		setIsActive(false);
-	}
+    if (url === "") {
+        setUrl("http://localhost/api/chat");
+        setUserId(uuidv4());
+        setIsActive(false);
+    }
 
-	async function onSubmit(event: FormEvent<HTMLFormElement>) {
-		event.preventDefault();
+    async function onSubmit(event: FormEvent<HTMLFormElement>) {
+        event.preventDefault();
+        const formData = new FormData(event.currentTarget);
 
-		const formData = new FormData(event.currentTarget);
-		const request = { message: formData.get("message"), user_id: formData.get("user_id") };
-		const url = formData.get("url");
-		if (url !== null) {
-			const commentsList = document.querySelector(".comment-wrapper");
-			const comment = document.createElement("div");
-			comment.innerHTML =
-				`
-			<div class="answer m-5 text-right rounded-xl border border-b  border-gray-300 bg-gray-200 bg-gradient-to-b from-zinc-200 p-4 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:bg-zinc-800/30 dark:from-inherit">
-				<p>
-					<b>Client:</b>
-				</p>
-				<p>` +
-				formData.get("message")?.toString() +
-				`</p>
-			</div>
-			
-			`;
+        const request = {message: formData.get("message"), user_id: formData.get("user_id")};
 
-			setMessage("");
-			setIsActive(true);
-			commentsList?.append(comment);
-			const response = await fetch(url.toString(), {
-				method: "POST",
-				headers: {
-					Accept: "application/json",
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(request),
-			});
+        if (url !== null) {
 
-			if (response.ok) {
-				const data = (await response.json()) as { Response: string };
+            const commentsList = document.querySelector(".screen");
 
-				const commentResponse = document.createElement("div");
-
-				commentResponse.innerHTML =
-					`
-			<div class="answer m-5 rounded-xl border border-b  border-gray-300 bg-gray-200 bg-gradient-to-b from-zinc-200 p-4 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:bg-zinc-800/30 dark:from-inherit">
-			<p>
-				<b>Chat:</b>
-			</p>
-			<p>` +
-					data.Response +
-					`</p>
-			</div>
+            const comment = document.createElement("div");
+            comment.className ='message'
+            comment.innerHTML =
+                `
+                   <div class="sender-box">
+                        <div class="sender-name">
+                            <span>Client:</span>
+                        </div>
+                        <span> ` +
+                formData.get("message")?.toString() + `
+                        </span>
+                    </div>
 
 			`;
-				setIsActive(false);
-				commentsList?.append(commentResponse);
-			}
-		}
-	}
+
+            setMessage("");
+            setIsActive(true);
+            commentsList?.append(comment);
+            const response = await fetch(url.toString(), {
+                method: "POST",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(request),
+            });
+
+            if (response.ok) {
+                const data = (await response.json()) as { Response: string };
+
+                const commentResponse = document.createElement("div");
+                commentResponse.className ='message'
+                commentResponse.innerHTML =
+                    `
+                   <div class="receiver-box">
+                        <div class="sender-name">
+                            <span>Chat</span>
+                        </div>
+                        <span> ` +
+                    data.Response + `
+                        </span>
+                    </div>
+
+			`;
+                setIsActive(false);
+                commentsList?.append(commentResponse);
+            }
+        }
+    }
 
     async function initChat() {
 
         console.log(url);
-		const request = { message: "init", user_id: userId };
+        const request = {message: "init", user_id: userId};
         setIsActive(true);
 
         const response = await fetch((url + '/init').toString(), {
@@ -83,78 +86,74 @@ export default function Form() {
                 Accept: "application/json",
                 "Content-Type": "application/json",
             },
-			body: JSON.stringify(request),
+            body: JSON.stringify(request),
         });
 
         if (response.ok) {
-			const data = (await response.json()) as { Response: string };
+            const data = (await response.json()) as { Response: string };
 
-			const commentResponse = document.createElement("div");
-
-			commentResponse.innerHTML =
-				`
-			<div class="answer m-5 rounded-xl border border-b  border-gray-300 bg-gray-200 bg-gradient-to-b from-zinc-200 p-4 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:bg-zinc-800/30 dark:from-inherit">
-			<p>
-				<b>Chat:</b>
-			</p>
-			<p>` +
-				data.Response +
-				`</p>
-			</div>
+            const commentResponse = document.createElement("div");
+            commentResponse.className ='message'
+            commentResponse.innerHTML =
+                `
+                   <div class="receiver-box">
+                        <div class="sender-name">
+                            <span>Chat</span>
+                        </div>
+                        <span> ` +
+                            data.Response + `
+                        </span>
+                    </div>
 
 			`;
-			setIsActive(false);
-			const commentsList = document.querySelector(".comment-wrapper");
-			commentsList?.append(commentResponse);
+            setIsActive(false);
+            const commentsList = document.querySelector(".screen");
+            commentsList?.append(commentResponse);
 
         }
     }
 
-	useEffect(() => {
-		void initChat();
-	},[]);
+    useEffect(() => {
+        void initChat();
+    }, []);
 
-	return (
-		<div>
-			<div id="spinner" className={`lds-dual-ring ${isActive ? "" : "invisible"}`}></div>
+    return (
 
-			<div className="p-15 bg-gray-100 pl-0">
-				<form onSubmit={onSubmit}>
-					<p className="p-2">
-						<label>Message:</label>
-						<input
-							type="text"
-							name="message"
-							className="w-9/12"
-							id="message"
-							value={message}
-							onChange={(e) => setMessage(e.target.value)}
-						/>
-					</p>
+        <div className="phone">
+            <div className="screen">
+                <div className="message">
 
-					<p className="p-2">
-						<label>Url:</label>
-						<input
-							type="text"
-							name="url"
-							id="url"
-							className="w-6/12"
-							value={url}
-							onChange={(e) => setUrl(e.target.value)}
-						/>
-					</p>
-					<input type="hidden" name="user_id" value={userId} />
+                </div>
+            </div>
+            <div className="input-box">
+                <form onSubmit={onSubmit}>
+                    <div>
+                    <input
+                        type="text"
+                        name="message"
+                        className="w-9/12"
+                        id="message"
+                        value={message}
+                        placeholder="Type your message..."
+                        onChange={(e) => setMessage(e.target.value)}
+                    />
+                    </div>
+                    <div className="send-bar">
+                    {isActive &&
+                    <div className="loading" >
+                        <span className="loading-text">Sending...</span>
+                        <div className="loader"></div>
+                        <button className="loading-button" disabled>Send</button>
+                    </div>
+                    }
+                    {!isActive &&
+                    <button className="send-button" type="submit">Send</button>
+                    }
+                    </div>
+                </form>
+            </div>
+        </div>
 
-					<p className="pt-2">
-						<button
-							type="submit"
-							className="mb-1 mr-1 rounded border border-gray-100 px-4 py-2 text-xs font-bold uppercase text-gray-800 outline-none transition-all duration-150 ease-linear hover:bg-green-950 hover:text-white focus:outline-none "
-						>
-							Send message &raquo;
-						</button>
-					</p>
-				</form>
-			</div>
-		</div>
-	);
+
+    );
 }
