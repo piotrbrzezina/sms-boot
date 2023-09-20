@@ -9,7 +9,7 @@ export default function Form() {
 	const [isActive, setIsActive] = useState(false);
 
 	if (url === "") {
-		setUrl("https://d541-91-233-251-217.ngrok-free.app/api/chat");
+		setUrl("http://localhost/api/chat");
 		setUserId(uuidv4());
 		setIsActive(false);
 	}
@@ -111,7 +111,7 @@ export default function Form() {
     }
 
 	useEffect(() => {
-		void initChat()
+		void initChat();
 	},[]);
 
 	return (
